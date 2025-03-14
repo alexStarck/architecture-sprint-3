@@ -1,0 +1,35 @@
+@startuml
+entity "User" as user {
+  * id : UUID
+  * username : String
+  * password : String
+  * email : String
+}
+
+entity "House" as house {
+  * id : UUID
+  * address : String
+  * owner_id : UUID
+}
+
+entity "Device" as device {
+  * id : UUID
+  * name : String
+  * serial_number : String
+  * houseId : UUID
+  * ownerId : UUID
+}
+
+entity "TelemetryData" as telemetryData {
+  * id : UUID
+  * timestamp : Timestamp
+  * device_id : UUID
+  * data : JSON
+}
+
+user --o{ house : owns
+user --o{ device : owns
+house --o{ device : contains
+device --o{ telemetryData : generates
+device --o{ configuration : has
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+!include diagram\С4_lib\C4_Component.puml
+
+Container_Boundary(UserServiceContainer, "User Service") {
+
+    Component(userService, "User Service", "Spring Boot Service", "Обрабатывает логику для сохранения и анализа телеметрических данных.")
+    Component(userDB, "User Database", "PostgreSQL", "Хранит телеметрические данные в базе данных.")
+
+    Rel(userService, userDB, "Сохраняет и извлекает данные из базы данных")
+
+}
+
+Container_Ext(user, "Пользователь")
+
+Rel(user, userService, "Взаимодействует с API Gateway для управления домом и устройствами.")
+
+@enduml

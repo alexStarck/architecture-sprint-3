@@ -1,0 +1,32 @@
+@startuml
+!include diagram\С4_lib\C4_Container.puml
+
+Container_Boundary(apiGatewayContainer, "API Gateway") {
+    Container(apiGateway, "API Gateway", "Spring Boot", "Центральная точка входа для всех запросов от внешних систем (пользователей и устройств).")
+}
+
+Container_Boundary(userServiceContainer, "User Service") {
+    Container(userService, "User Service", "Spring Boot", "Управляет данными пользователей и их учетными записями.")
+    ContainerDb(userDb, "User DB", "PostgreSQL", "Хранит данные о пользователях.")
+}
+
+Container_Boundary(harvesterServiceContainer, "Harvester Service") {
+    Container(harvesterService, "Harvester Service", "Spring Boot", "Управляет данными о домах и связанных с ними устройствах.")
+    ContainerDb(harvesterDb, "Harvester DB", "PostgreSQL", "Хранит данные о домах и устройствах.")
+}
+
+
+Container_Ext(houseContainer, "Дом"){
+    Container_Ext(sensor, "Датчики", "Отправляют данные телеметрии через Sensor API Layer.")
+    Container_Ext(temp_set, "Система отопления", "Осуществляют регулировку температуры")
+}
+Container_Ext(user, "Пользователь", "Взаимодействует с API Gateway для управления домом и устройствами.")
+
+Rel(user, apiGateway, "Запросы на управление устройствами и просмотр данных телеметрии")
+Rel(apiGateway, userService, "Доступ к данным пользователя, подключение датчиков, установка температуры")
+Rel(apiGateway, harvesterService, "Доступ к данным о температуре")
+
+Rel(sensor, harvesterService, "Отправка данных телеметрии")
+Rel(userService, temp_set, "Установка температуры")
+
+@enduml

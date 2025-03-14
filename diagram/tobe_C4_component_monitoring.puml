@@ -1,0 +1,17 @@
+@startuml
+!include diagram\С4_lib\C4_Component.puml
+
+Container_Boundary(telemetryServiceContainer, "Telemetry Service") {
+
+    Component(telemetryService, "Telemetry Service", "Spring Boot Service", "Обрабатывает логику для сохранения и анализа телеметрических данных.")
+    Component(telemetryRepository, "Telemetry Repository", "PostgreSQL", "Хранит телеметрические данные в базе данных.")
+
+    Rel(telemetryService, telemetryRepository, "Сохраняет и извлекает данные из базы данных")
+
+}
+
+Container_Ext(deviceService, "Device Service", "Spring Boot", "Передает данные в Telemetry Service.")
+
+Rel(deviceService, telemetryService, "Отправляет данные телеметрии")
+
+@enduml
