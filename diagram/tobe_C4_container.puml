@@ -1,5 +1,5 @@
 @startuml
-!include diagram\С4_lib\C4_Container.puml
+!include diagram/С4_lib/C4_Container.puml
 
 Container_Boundary(apiGatewayContainer, "API Gateway") {
     Container(apiGateway, "API Gateway", "Spring Boot", "Центральная точка входа для всех запросов от внешних систем (пользователей и устройств).")

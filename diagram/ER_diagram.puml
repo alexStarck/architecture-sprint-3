@@ -9,14 +9,12 @@ entity "User" as user {
 entity "House" as house {
   * id : UUID
   * address : String
-  * owner_id : UUID
 }
 
 entity "Device" as device {
   * id : UUID
   * name : String
   * serial_number : String
-  * houseId : UUID
   * ownerId : UUID
 }
 
@@ -27,7 +25,20 @@ entity "TelemetryData" as telemetryData {
   * data : JSON
 }
 
-user --o{ house : owns
+entity "Configuration" as configuration {
+  * id : UUID
+  * device_id : UUID
+  * config : JSON
+}
+
+entity "UserHouse" as userHouse {
+  * id : UUID
+  * user_id : UUID
+  * house_id : UUID
+}
+
+user --o{ userHouse : links
+house --o{ userHouse : links
 user --o{ device : owns
 house --o{ device : contains
 device --o{ telemetryData : generates
