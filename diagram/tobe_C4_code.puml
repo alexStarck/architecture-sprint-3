@@ -1,0 +1,58 @@
+@startuml
+
+package "User Service" {
+    class Device {
+        +UUID id
+        +String name
+        +String type
+        +JSON configuration
+        +addCommand(Command)
+        +removeCommand(Command)
+        +applyCommand(Command)
+        +requestCommand()
+        +getTelemetryData()
+    }
+
+    class Command {
+        +UUID id
+        +String type
+        +JSON parameters
+        +Device device
+    }
+
+    class DeviceGroup {
+        +UUID id
+        +String name
+        +List<Device> devices
+        +applyCommandToAll(Command)
+    }
+
+    class DeviceRepository {
+        +save(Device)
+        +findById(UUID)
+        +findAll()
+    }
+
+    Device --> Command : "sends"
+    DeviceGroup --> Device : "contains"
+    DeviceGroup --> Command : "applies command to all"
+    DeviceRepository --> Device : "manages"
+}
+
+package "Harvester Service" {
+
+    class TelemetryClient {
+        +sendTelemetryData(TelemetryData)
+    }
+
+    class TelemetryData {
+        +UUID id
+        +Timestamp timestamp
+        +UUID deviceId
+        +JSON data
+    }
+
+    TelemetryClient --> TelemetryData : "sends"
+}
+
+@enduml
